@@ -204,10 +204,6 @@ class CachedGitHub:
                         line,
                         str(e),
                     )
-        # overwrite persistent cache by valid entries
-        with cache_file.open(mode="w") as f:
-            for v in data.values():
-                print(json_dumps(v.into_dict()), file=f)
         return data
 
 
