@@ -1,0 +1,6 @@
+#!/bin/bash
+
+d=$(cd $(dirname $0); pwd)
+pushd "$d" > /dev/null
+uv run python outbound.py "$@"
+popd > /dev/null
