@@ -20,7 +20,7 @@ gh licensecheck outbound [FLAGS]
 gh licensecheck extract TARGET
   Extract direct dependencies in go.mod which hosted on GitHub.
 
-TARGET: go, pipenv
+TARGET: go, pipenv, rust
 ```
 
 ## Installation

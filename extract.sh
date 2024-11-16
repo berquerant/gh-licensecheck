@@ -46,9 +46,38 @@ $1 == "" {
     list_urls | grep -F "github.com" | grep -o 'github.com/.*' | cut -d "/" -f2,3
 }
 
+extract_from_cargo() {
+    cargotoml="${d}/Cargo.toml"
+
+    read_package_names() {
+        awk '
+write == 1 {
+  print $1
+}
+$1 == "[dependencies]" {
+  write = 1
+}
+$1 == "" {
+  write = 0
+}' "$cargotoml" | grep -v "^$"
+    }
+
+    repository() {
+        cargo info "$1" | awk '$1 == "repository:" {print $2}'
+    }
+
+    list_urls() {
+        read_package_names | while read name ; do repository "$name" ; done
+    }
+
+    list_urls | grep -v -F "github.com" | while read url ; do echo "IGNORE: ${url}" ; done > /dev/stderr
+    list_urls | grep -F "github.com" | grep -o 'github.com/.*' | cut -d "/" -f2,3
+}
+
 case "$1" in
     "go") extract_from_gomod ;;
     "pipenv") extract_from_pipfile ;;
+    "rust") extract_from_cargo ;;
     *)
         echo "Unknown argument: $1" > /dev/stderr
         exit 1
