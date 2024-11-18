@@ -14,7 +14,7 @@ extract_from_gomod() {
             sed -e 's|^\t||' -e 's|^require ||'
     }
 
-    read_packages | grep -v -F "github.com" | while read repo ; do echo "IGNORE: ${repo}" ; done > /dev/stderr
+    read_packages | grep -v -F "github.com" | while read -r repo ; do echo "IGNORE: ${repo}" ; done > /dev/stderr
     read_packages | grep -F "github.com" | awk '{print $1}' | cut -d "/" -f2,3
 }
 
@@ -39,10 +39,10 @@ $1 == "" {
     }
 
     list_urls() {
-        read_package_names | while read name ; do homepage_url "$name" ; done
+        read_package_names | while read -r name ; do homepage_url "$name" ; done
     }
 
-    list_urls | grep -v -F "github.com" | while read url ; do echo "IGNORE: ${url}" ; done > /dev/stderr
+    list_urls | grep -v -F "github.com" | while read -r url ; do echo "IGNORE: ${url}" ; done > /dev/stderr
     list_urls | grep -F "github.com" | grep -o 'github.com/.*' | cut -d "/" -f2,3
 }
 
@@ -67,10 +67,10 @@ $1 == "" {
     }
 
     list_urls() {
-        read_package_names | while read name ; do repository "$name" ; done
+        read_package_names | while read -r name ; do repository "$name" ; done
     }
 
-    list_urls | grep -v -F "github.com" | while read url ; do echo "IGNORE: ${url}" ; done > /dev/stderr
+    list_urls | grep -v -F "github.com" | while read -r url ; do echo "IGNORE: ${url}" ; done > /dev/stderr
     list_urls | grep -F "github.com" | grep -o 'github.com/.*' | cut -d "/" -f2,3
 }
 
